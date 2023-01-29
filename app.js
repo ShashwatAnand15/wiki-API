@@ -75,6 +75,7 @@ app.route("/articles/:articleTitle")
     })
 })
 // Now to update one article we don't need to overwrite in MongoDB.
+//here if we leave any attribute as empty value then it will update that attribtue with empty value.
 .put(function(req,res){
     Article.updateOne(
         {title: req.params.articleTitle},
@@ -83,10 +84,26 @@ app.route("/articles/:articleTitle")
             if(!err){
                 res.send("Successfully updated the article");
             } else {
-                console.log(err);
+                res.send(err);
             }
         }
     );
+})
+
+.patch(function(req,res){
+
+
+    Article.updateOne(
+        {title: req.params.articleTitle},
+        {$set: req.body}, // $ sign helps us to only change some attributes in mongoDB
+        function(err){
+            if(!err){
+                res.send("Successfully updated the article");
+            } else {
+                res.send(err);
+            }
+        }
+    )
 });
 
 
